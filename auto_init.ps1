@@ -14,6 +14,7 @@ $packageJson.scripts | Add-Member -Type NoteProperty -Name 'test-silent' -Value 
 $packageJson.scripts | Add-Member -Type NoteProperty -Name 'build' -Value "rimraf ./build && tsc"
 $packageJson.scripts | Add-Member -Type NoteProperty -Name 'start' -Value "node build/index.js"
 $packageJson.scripts | Add-Member -Type NoteProperty -Name 'restart' -Value "npm run build && npm run start"
+$packageJson.scripts | Add-Member -Type NoteProperty -Name 'test-watch' -Value "npm run build && jest --watch --runInBand --detectOpenHandles"
 
 $packageJson | ConvertTo-Json | Set-Content $package
 
@@ -58,6 +59,10 @@ Write-Host ">> Installing rimraf"
 
 npm install --save-dev rimraf
 
+Write-Host ">> Installing dotenv"
+
+npm install --save-dev dotenv
+
 Write-Host ">> Creating Folders"
 
 $Folders = @("./src", "./test")
@@ -91,7 +96,8 @@ Set-Content tsconfig.json '{
       "esModuleInterop": true,                             
       "forceConsistentCasingInFileNames": true,            
       "strict": true,                                      
-      "noImplicitAny": true,                               
+      "noImplicitAny": true, 
+      "skipLibCheck": true                                 
     },
     "include": [
       "src/**/*.ts"
